@@ -77,6 +77,11 @@ class Bruch(object):
         tempn = abs(self.nenner)
         return Bruch(tempz, tempn)
 
+    def _Bruch__makeBruch(cls, value):
+        if type(value) is str:
+            raise TypeError
+        return Bruch(value)
+
     ## Unit_Addition
     def __add__(self, other):
         if type(other) is float:
@@ -102,20 +107,32 @@ class Bruch(object):
     def __div__(self, other):
         if type(other) is float:
             raise TypeError
-        else:
-            self = float(self)
-            other = float(other)
-            erg = self / other
-
         return float(self) / float(other)
 
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
+        if self.zaehler is 0:
+            raise ZeroDivisionError
+        if type(other) is float:
+            raise TypeError
         return float(self) / float(other)
 
+    def __itruediv__(self, other):
+        if type(other) is str:
+            raise TypeError
+        return self/other
 
     ## Unit_Multiplikation
     def __mul__(self, other):
-        return float(self) * float(other)
+        if type(other) is float:
+            raise TypeError
+        else:
+            return float(self) * float(other)
+
+    def __imul__(self, other):
+        if type(other) is str:
+            raise TypeError
+        else:
+            return float(self) * float(other)
 
     def __rmul__(self, other):
         return float(self) * float(other)
@@ -176,4 +193,3 @@ class Bruch(object):
             return False
 
     ## Unit_Zusatz
-
