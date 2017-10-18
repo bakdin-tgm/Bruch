@@ -77,10 +77,9 @@ class Bruch(object):
         tempn = abs(self.nenner)
         return Bruch(tempz, tempn)
 
-    def _Bruch__makeBruch(cls, value):
-        if type(value) is str:
-            raise TypeError
-        return Bruch(value)
+    @staticmethod
+    def _Bruch__makeBruch(self):
+        return Bruch(self,1)
 
     ## Unit_Addition
     def __add__(self, other):
@@ -107,6 +106,15 @@ class Bruch(object):
     def __div__(self, other):
         if type(other) is float:
             raise TypeError
+        if self.zaehler == 0:
+            raise ZeroDivisionError
+        return float(self) / float(other)
+
+    def __truediv__(self, other):
+        if float(self) == 0:
+            raise ZeroDivisionError
+        if type(other) is float:
+            raise TypeError
         return float(self) / float(other)
 
     def __rtruediv__(self, other):
@@ -115,6 +123,10 @@ class Bruch(object):
         if type(other) is float:
             raise TypeError
         return float(self) / float(other)
+
+    def __rdiv__(self, other):
+        erg = self / int(other)
+        return erg
 
     def __itruediv__(self, other):
         if type(other) is str:
@@ -139,9 +151,13 @@ class Bruch(object):
 
     ## Unit_String
     def __str__(self):
-        tempz = str(abs(self.zaehler))
-        tempn = str(abs(self.nenner))
-        return "("+tempz+"/"+tempn+")"
+        if self.nenner == 1:
+            tempz = str(abs(self.zaehler))
+            return "("+tempz+")"
+        else:
+            tempz = str(abs(self.zaehler))
+            tempn = str(abs(self.nenner))
+            return "("+tempz+"/"+tempn+")"
 
     ## Unit_Subtraktion
     def __sub__(self, other):
@@ -193,3 +209,6 @@ class Bruch(object):
             return False
 
     ## Unit_Zusatz
+    def __iter__(self):
+        yield self.zaehler
+        yield self.nenner
